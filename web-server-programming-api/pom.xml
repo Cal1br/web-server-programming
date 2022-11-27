@@ -10,8 +10,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>me.cal1br</groupId>
-    <artifactId>web-server-programming-ui</artifactId>
+    <artifactId>web-server-programming-api</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
