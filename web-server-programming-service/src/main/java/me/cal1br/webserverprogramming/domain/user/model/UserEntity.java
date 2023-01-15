@@ -1,4 +1,4 @@
-package me.cal1br.webserverprogramming.user.model;
+package me.cal1br.webserverprogramming.domain.user.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

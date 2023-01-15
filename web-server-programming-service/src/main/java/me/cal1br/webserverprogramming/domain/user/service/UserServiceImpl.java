@@ -1,4 +1,4 @@
-package me.cal1br.webserverprogramming.user.service;
+package me.cal1br.webserverprogramming.domain.user.service;
 
 import org.springframework.stereotype.Service;
 

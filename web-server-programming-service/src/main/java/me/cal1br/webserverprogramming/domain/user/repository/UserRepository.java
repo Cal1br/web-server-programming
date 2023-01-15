@@ -1,6 +1,6 @@
-package me.cal1br.webserverprogramming.user.repository;
+package me.cal1br.webserverprogramming.domain.user.repository;
 
-import me.cal1br.webserverprogramming.user.model.UserEntity;
+import me.cal1br.webserverprogramming.domain.user.model.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
