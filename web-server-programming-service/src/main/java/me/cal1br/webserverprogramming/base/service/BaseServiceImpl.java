@@ -6,7 +6,6 @@ import me.cal1br.webserverprogramming.base.model.BaseEntity;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.util.CollectionUtils;
@@ -26,11 +25,11 @@ public abstract class BaseServiceImpl<
     private final REPOSITORY repository;
     protected Class<DTO> dtoTypeToken;
     protected Class<ENTITY> entityTypeToken;
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
-    protected BaseServiceImpl(final REPOSITORY repository, Class<DTO> dtoTypeToken, Class<ENTITY> entityTypeToken) {
+    protected BaseServiceImpl(final REPOSITORY repository, Class<DTO> dtoTypeToken, Class<ENTITY> entityTypeToken, final ModelMapper modelMapper) {
         this.repository = repository;
+        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -69,7 +68,7 @@ public abstract class BaseServiceImpl<
 
     @Override
     public List<DTO> findAll(final FILTER filter) {
-        findAll()
+
         return this.repository.findAll();
     }
 
