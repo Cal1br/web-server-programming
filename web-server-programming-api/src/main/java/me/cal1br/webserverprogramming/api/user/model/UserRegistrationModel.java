@@ -1,4 +1,4 @@
-package me.cal1br.webserverprogrammingui.user.model;
+package me.cal1br.webserverprogramming.api.user.model;
 
 import lombok.Data;
 
