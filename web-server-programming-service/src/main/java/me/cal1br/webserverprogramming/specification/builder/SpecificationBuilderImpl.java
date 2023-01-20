@@ -1,47 +1,53 @@
-package me.cal1br.webserverprogramming.specification;
+package me.cal1br.webserverprogramming.specification.builder;
+
+import me.cal1br.webserverprogramming.specification.GroupType;
+import me.cal1br.webserverprogramming.specification.PredicateHolder;
+import org.springframework.util.CollectionUtils;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Root;
 import javax.persistence.metamodel.SingularAttribute;
 import java.time.Duration;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Specification builder using metamodel
- * <p>
- * Starts with and
- *
- * @param <T>
- */
-public class SpecificationBuilder<T> {
+public class SpecificationBuilderImpl<T> implements SpecificationBuilder<T>, SpecificationBuilderInnerBuilder<T> {
     private final Root<T> root;
     private final CriteriaQuery<?> query;
     private final CriteriaBuilder cb;
     private final List<PredicateHolder> list;
     private PredicateHolder current;
 
-    public SpecificationBuilder(final Root<T> root, final CriteriaQuery<?> query, final CriteriaBuilder cb) {
+    public SpecificationBuilderImpl(final Root<T> root, final CriteriaQuery<?> query, final CriteriaBuilder cb) {
         this.root = root;
         this.query = query;
         this.cb = cb;
 
         list = new LinkedList<>();
-        current = new PredicateHolder(cb, GroupTypes.AND);
+        current = new PredicateHolder(cb, GroupType.AND);
         list.add(current);
+
+        query.orderBy();
     }
 
-    public SpecificationBuilder<T> and() {
-        current = new PredicateHolder(cb, GroupTypes.AND);
+
+    public SpecificationBuilder<T> gAnd() {
+        current = new PredicateHolder(cb, GroupType.AND);
         list.add(current);
         return this;
     }
 
-    public SpecificationBuilder<T> or() {
-        current = new PredicateHolder(cb, GroupTypes.OR);
+    public SpecificationBuilder<T> gOr() {
+        current = new PredicateHolder(cb, GroupType.OR);
         list.add(current);
+        return this;
+    }
+
+    @Override
+    public SpecificationBuilder<T> not() {
+        current.invertNext();
         return this;
     }
 
@@ -53,7 +59,16 @@ public class SpecificationBuilder<T> {
         return this;
     }
 
-    public <Y extends String> SpecificationBuilder<T> startsWith(SingularAttribute<? super T, String> column, Y value) {
+    @Override
+    public <Y> SpecificationBuilder<T> in(final SingularAttribute<? super T, Y> column, final Collection<Y> values) {
+        if (CollectionUtils.isEmpty(values)) {
+            return this;
+        }
+        current.addPredicate(cb.in(root.get(column)).in(values));
+        return this;
+    }
+
+    public SpecificationBuilder<T> startsWith(SingularAttribute<? super T, String> column, String value) {
         if (value == null) {
             return this;
         }
@@ -61,7 +76,7 @@ public class SpecificationBuilder<T> {
         return this;
     }
 
-    public <Y extends String> SpecificationBuilder<T> startsWithIgnoreCase(SingularAttribute<? super T, String> column, Y value) {
+    public SpecificationBuilder<T> startsWithIgnoreCase(SingularAttribute<? super T, String> column, String value) {
         if (value == null) {
             return this;
         }
@@ -69,7 +84,7 @@ public class SpecificationBuilder<T> {
         return this;
     }
 
-    public <Y extends String> SpecificationBuilder<T> contains(SingularAttribute<? super T, String> column, Y value) {
+    public SpecificationBuilder<T> contains(SingularAttribute<? super T, String> column, String value) {
         if (value == null) {
             return this;
         }
@@ -77,7 +92,7 @@ public class SpecificationBuilder<T> {
         return this;
     }
 
-    public <Y extends String> SpecificationBuilder<T> containsIgnoreCase(SingularAttribute<? super T, String> column, Y value) {
+    public SpecificationBuilder<T> containsIgnoreCase(SingularAttribute<? super T, String> column, String value) {
         if (value == null) {
             return this;
         }
@@ -99,29 +114,26 @@ public class SpecificationBuilder<T> {
             return this;
         }
         current.addPredicate(cb.greaterThanOrEqualTo(
-                (Expression<FCK>)root.get(column),
+                        root.get(column),
                         value
                 )
         );
         return this;
     }
 
-    public <Y extends Number> SpecificationBuilder<T> lt(SingularAttribute<? super T, Y> column, Y value) {
+    public <Y extends Number & Comparable<Y>> SpecificationBuilder<T> lt(SingularAttribute<? super T, Y> column, Y value) {
         if (value == null) {
             return this;
         }
-
-        current.addPredicate(cb.lt(root.get(column), value));
-
+        current.addPredicate(cb.lessThan(root.get(column), value));
         return this;
     }
 
-    public <Y> SpecificationBuilder<T> lte(SingularAttribute<? super T, Y> column, Y value) {
+    public <Y extends Number & Comparable<Y>> SpecificationBuilder<T> lte(SingularAttribute<? super T, Y> column, Y value) {
         if (value == null) {
             return this;
         }
-        //todo!
-        //root.get(column)
+        current.addPredicate(cb.lessThanOrEqualTo(root.get(column), value));
         return this;
     }
 
@@ -136,6 +148,31 @@ public class SpecificationBuilder<T> {
 
     public <Y> SpecificationBuilder<T> dateEqualsAround(SingularAttribute<? super T, Y> column, Y value, final Duration duration) {
         //todo
+        return this;
+    }
+
+
+
+    @Override
+    public SpecificationBuilderInnerBuilder<T> inner() {
+        return this;
+    }
+
+    @Override
+    public SpecificationBuilder<T> and() {
+        current = current.enterInner(GroupType.AND);
+        return this;
+    }
+
+    @Override
+    public SpecificationBuilder<T> or() {
+        current = current.enterInner(GroupType.OR);
+        return this;
+    }
+
+    @Override
+    public SpecificationBuilder<T> exit() {
+        current = current.exitInner();
         return this;
     }
 }

@@ -5,7 +5,7 @@ import javax.persistence.criteria.Predicate;
 import java.util.List;
 import java.util.function.BiFunction;
 
-public enum GroupTypes {
+public enum GroupType {
     AND((criteriaBuilder, predicates) ->
             criteriaBuilder.and(predicates.toArray(new Predicate[]{}))
     ),
@@ -14,7 +14,7 @@ public enum GroupTypes {
 
     private final BiFunction<CriteriaBuilder, List<Predicate>, Predicate> func;
 
-    GroupTypes(final BiFunction<CriteriaBuilder, List<Predicate>, Predicate> func) {
+    GroupType(final BiFunction<CriteriaBuilder, List<Predicate>, Predicate> func) {
         this.func = func;
     }
 

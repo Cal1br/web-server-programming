@@ -3,11 +3,12 @@ package me.cal1br.webserverprogramming.base.service;
 import me.cal1br.webserverprogramming.api.base.filter.BaseFilter;
 import me.cal1br.webserverprogramming.api.base.model.BaseDTO;
 import me.cal1br.webserverprogramming.base.model.BaseEntity;
+import me.cal1br.webserverprogramming.base.repository.FilterRepository;
+import me.cal1br.webserverprogramming.domain.user.model.UserEntity_;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Collection;
@@ -19,13 +20,13 @@ public abstract class BaseServiceImpl<
         DTO extends BaseDTO,
         ENTITY extends BaseEntity,
         FILTER extends BaseFilter,
-        REPOSITORY extends JpaRepository<ENTITY, Long> & JpaSpecificationExecutor<ENTITY>
+        REPOSITORY extends JpaRepository<ENTITY, Long> & FilterRepository<ENTITY, FILTER>
         > implements BaseService<DTO, FILTER> {
     private static final Logger LOGGER = LoggerFactory.getLogger(BaseServiceImpl.class);
     private final REPOSITORY repository;
+    private final ModelMapper modelMapper;
     protected Class<DTO> dtoTypeToken;
     protected Class<ENTITY> entityTypeToken;
-    private final ModelMapper modelMapper;
 
     protected BaseServiceImpl(final REPOSITORY repository, Class<DTO> dtoTypeToken, Class<ENTITY> entityTypeToken, final ModelMapper modelMapper) {
         this.repository = repository;
@@ -69,7 +70,8 @@ public abstract class BaseServiceImpl<
     @Override
     public List<DTO> findAll(final FILTER filter) {
 
-        return this.repository.findAll();
+        //todo
+        return this.toDto(this.repository.findAll());
     }
 
     @Override
