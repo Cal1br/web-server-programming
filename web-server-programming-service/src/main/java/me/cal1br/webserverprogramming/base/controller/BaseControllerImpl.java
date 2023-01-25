@@ -17,9 +17,12 @@ public abstract class BaseControllerImpl<DTO extends BaseDTO, FILTER extends Bas
         this.service = service;
     }
 
+    protected SERVICE getService() {
+        return this.service;
+    }
+
     public List<DTO> findByFilter(FILTER filter) {
         return service.findAll(filter);
-        //return Collections.emptyList(); //TODO
     }
 
     public List<DTO> saveAll(List<DTO> dtos) {

@@ -4,6 +4,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import me.cal1br.webserverprogramming.api.base.model.BaseDTO;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 /* TODO
 *         ▪ Наименование на продукт - текст с дължина не по-голяма от 50 символа.
 Задължително поле.
@@ -21,11 +24,18 @@ import me.cal1br.webserverprogramming.api.base.model.BaseDTO;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class ProductDTO extends BaseDTO {
+    @NotNull
+    @Size(max = 50)
     private String productName;
     private String productDescription;
-    private double priceBuy; //the price that the item was bought for
-    private double priceSell;
-    private int productCount;
+    private String image;
+    @NotNull
+    private Double priceBuy; //the price that the item was bought for
+    @NotNull
+    private Double priceSell;
+    @NotNull
+    private Integer productCount;
     private ProductCategory productCategory;
+    @NotNull
     private String skuCode;
 }

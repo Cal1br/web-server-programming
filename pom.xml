@@ -14,6 +14,12 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>web-server-programming-parent</name>
     <description>web-server-programming</description>
+
+    <modules>
+        <module>web-server-programming-api</module>
+        <module>web-server-programming-service</module>
+    </modules>
+
     <properties>
         <java.version>11</java.version>
     </properties>

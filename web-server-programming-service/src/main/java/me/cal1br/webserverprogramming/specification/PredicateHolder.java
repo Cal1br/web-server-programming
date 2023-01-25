@@ -1,9 +1,12 @@
 package me.cal1br.webserverprogramming.specification;
 
+import org.springframework.util.CollectionUtils;
+
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 public class PredicateHolder {
 
@@ -34,7 +37,7 @@ public class PredicateHolder {
         if (this.parentHolder == null) {
             throw new IllegalStateException("There isn't a parent group holding this group!");
         }
-        this.parentHolder.addPredicate(this.toPredicate());
+        this.toPredicate().ifPresent(this.parentHolder::addPredicate);
         return this.parentHolder;
     }
 
@@ -48,8 +51,11 @@ public class PredicateHolder {
         return this;
     }
 
-    public Predicate toPredicate() {
-        return group.resolve(criteriaBuilder, predicateList);
+    public Optional<Predicate> toPredicate() {
+        if(CollectionUtils.isEmpty(this.predicateList)){
+            return Optional.empty();
+        }
+        return Optional.of(group.resolve(criteriaBuilder, predicateList));
     }
 
     public PredicateHolder invertNext() {

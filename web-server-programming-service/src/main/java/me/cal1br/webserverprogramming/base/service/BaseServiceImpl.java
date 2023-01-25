@@ -4,7 +4,6 @@ import me.cal1br.webserverprogramming.api.base.filter.BaseFilter;
 import me.cal1br.webserverprogramming.api.base.model.BaseDTO;
 import me.cal1br.webserverprogramming.base.model.BaseEntity;
 import me.cal1br.webserverprogramming.base.repository.FilterRepository;
-import me.cal1br.webserverprogramming.domain.user.model.UserEntity_;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +12,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -28,9 +28,20 @@ public abstract class BaseServiceImpl<
     protected Class<DTO> dtoTypeToken;
     protected Class<ENTITY> entityTypeToken;
 
-    protected BaseServiceImpl(final REPOSITORY repository, Class<DTO> dtoTypeToken, Class<ENTITY> entityTypeToken, final ModelMapper modelMapper) {
+    protected BaseServiceImpl(final REPOSITORY repository,
+                              final ModelMapper modelMapper,
+                              final Class<DTO> dtoTypeToken,
+                              final Class<ENTITY> entityTypeToken) {
         this.repository = repository;
         this.modelMapper = modelMapper;
+        this.dtoTypeToken = dtoTypeToken;
+        this.entityTypeToken = entityTypeToken;
+    }
+
+    @Override
+    public Optional<DTO> findById(final long id) {
+        final Optional<ENTITY> byId = repository.findById(id);
+        return byId.map(this::toDto);
     }
 
     @Override
@@ -69,9 +80,7 @@ public abstract class BaseServiceImpl<
 
     @Override
     public List<DTO> findAll(final FILTER filter) {
-
-        //todo
-        return this.toDto(this.repository.findAll());
+        return this.toDto(this.repository.findByFilter(filter));
     }
 
     @Override
@@ -87,6 +96,10 @@ public abstract class BaseServiceImpl<
         return 0;
     }
 
+    protected REPOSITORY getRepository(){
+        return this.repository;
+    }
+
     protected DTO toDto(final ENTITY entity) {
         //I typically do this with interfaces toDTO and toEntity, but this time I wanted to try out the model mapper
         return modelMapper.map(entity, dtoTypeToken);
@@ -96,11 +109,11 @@ public abstract class BaseServiceImpl<
         return modelMapper.map(dto, entityTypeToken);
     }
 
-    private List<DTO> toDto(final List<ENTITY> entities) {
+    protected List<DTO> toDto(final List<ENTITY> entities) {
         return entities.stream().map(this::toDto).collect(Collectors.toList());
     }
 
-    private List<ENTITY> toEntity(final List<DTO> dtos) {
+    protected List<ENTITY> toEntity(final List<DTO> dtos) {
         return dtos.stream().map(this::toEntity).collect(Collectors.toList());
     }
 }

@@ -23,18 +23,11 @@ public class UserSpecification extends BaseSpecification<UserEntity> implements 
     @Override
     public Predicate toPredicate(final Root<UserEntity> root, final CriteriaQuery<?> query, final CriteriaBuilder criteriaBuilder) {
         query.orderBy(resolveOrder(filter.getColumnOrderList(), root, criteriaBuilder));
-
         final SpecificationBuilder<UserEntity> specBuilder = SpecificationBuilder.init(root, query, criteriaBuilder)
                 .in(UserEntity_.id, this.filter.getIdList())
-                .inner().and()
-
-                .not()
-                ;
-                //.containsIgnoreCase();
-
-
-        return null;
+                .startsWithIgnoreCase(UserEntity_.username, filter.getUserName())
+                .startsWithIgnoreCase(UserEntity_.email, filter.getEmail())
+                .startsWithIgnoreCase(UserEntity_.phoneNumber, filter.getPhoneNumber());
+        return specBuilder.build();
     }
-
-
 }

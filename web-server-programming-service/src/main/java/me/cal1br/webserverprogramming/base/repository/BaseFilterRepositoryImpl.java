@@ -17,7 +17,9 @@ public abstract class BaseFilterRepositoryImpl<ENTITY extends BaseEntity, FILTER
 
     @Override
     public List<ENTITY> findByFilter(final FILTER filter) {
-        //todo
+        if(filter == null){
+            throw new IllegalArgumentException("Filter cannot be null");
+        }
         return this.repository.findAll(this.getSpecification(filter));
     }
 

@@ -2,6 +2,7 @@ package me.cal1br.webserverprogramming.specification.builder;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.metamodel.SingularAttribute;
 import java.time.Duration;
@@ -26,11 +27,13 @@ public interface SpecificationBuilder<T> {
 
     /**
      * Inverts the next predicate
+     *
      * @return the builder
      */
     SpecificationBuilder<T> not();
 
     <Y> SpecificationBuilder<T> eq(SingularAttribute<? super T, Y> column, Y value);
+
     <Y> SpecificationBuilder<T> in(SingularAttribute<? super T, Y> column, Collection<Y> value);
 
     SpecificationBuilder<T> startsWith(SingularAttribute<? super T, String> column, String value);
@@ -57,4 +60,5 @@ public interface SpecificationBuilder<T> {
 
     SpecificationBuilderInnerBuilder<T> inner();
 
+    Predicate build();
 }

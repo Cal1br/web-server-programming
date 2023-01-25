@@ -6,6 +6,7 @@ import org.springframework.util.CollectionUtils;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.metamodel.SingularAttribute;
 import java.time.Duration;
@@ -152,7 +153,6 @@ public class SpecificationBuilderImpl<T> implements SpecificationBuilder<T>, Spe
     }
 
 
-
     @Override
     public SpecificationBuilderInnerBuilder<T> inner() {
         return this;
@@ -174,5 +174,14 @@ public class SpecificationBuilderImpl<T> implements SpecificationBuilder<T>, Spe
     public SpecificationBuilder<T> exit() {
         current = current.exitInner();
         return this;
+    }
+
+    @Override
+    public Predicate build() {
+        final List<Predicate> predicateList = new LinkedList<>();
+        for (final PredicateHolder predicateHolder : this.list) {
+            predicateHolder.toPredicate().ifPresent(predicateList::add);
+        }
+        return this.cb.and(predicateList.toArray(new Predicate[0]));
     }
 }
