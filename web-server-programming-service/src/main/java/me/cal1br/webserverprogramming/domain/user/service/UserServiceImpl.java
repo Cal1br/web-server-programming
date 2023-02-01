@@ -38,7 +38,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserDTO,
                            final JWTService jwtService,
                            @Value("${auth.user.token.expiration.time_hours:48}") final int expirationHours
     ) {
-        super(repository, modelMapper, UserDTO.class, UserEntity.class);
+        super(repository, UserDTO.class, UserEntity.class);
         this.jwtService = jwtService;
         this.expirationHours = expirationHours;
         userCache = CacheBuilder.newBuilder()

@@ -27,7 +27,6 @@ import java.util.Arrays;
 public class ImageServiceImpl implements ImageService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ImageServiceImpl.class);
     private static final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("yyyy_MM_dd-HH_mm_ss_SSS");
-
     private final String imageLocationPrefix;
     private final String[] validPictureExtensions;
 

@@ -5,10 +5,12 @@ import me.cal1br.webserverprogramming.api.user.filter.UserFilter;
 import me.cal1br.webserverprogramming.api.user.model.UserDTO;
 import me.cal1br.webserverprogramming.base.controller.BaseControllerImpl;
 import me.cal1br.webserverprogramming.domain.user.service.UserService;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.List;
 
+@RestController
 public class UserControllerImpl extends BaseControllerImpl<UserDTO, UserFilter, UserService> implements UserController {
 
     protected UserControllerImpl(final UserService service) {

@@ -7,6 +7,7 @@ import me.cal1br.webserverprogramming.base.repository.FilterRepository;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.util.CollectionUtils;
 
@@ -24,16 +25,14 @@ public abstract class BaseServiceImpl<
         > implements BaseService<DTO, FILTER> {
     private static final Logger LOGGER = LoggerFactory.getLogger(BaseServiceImpl.class);
     private final REPOSITORY repository;
-    private final ModelMapper modelMapper;
-    protected Class<DTO> dtoTypeToken;
-    protected Class<ENTITY> entityTypeToken;
+    protected final Class<DTO> dtoTypeToken;
+    protected final Class<ENTITY> entityTypeToken;
+    private ModelMapper modelMapper;
 
     protected BaseServiceImpl(final REPOSITORY repository,
-                              final ModelMapper modelMapper,
                               final Class<DTO> dtoTypeToken,
                               final Class<ENTITY> entityTypeToken) {
         this.repository = repository;
-        this.modelMapper = modelMapper;
         this.dtoTypeToken = dtoTypeToken;
         this.entityTypeToken = entityTypeToken;
     }
@@ -115,5 +114,10 @@ public abstract class BaseServiceImpl<
 
     protected List<ENTITY> toEntity(final List<DTO> dtos) {
         return dtos.stream().map(this::toEntity).collect(Collectors.toList());
+    }
+
+    @Autowired
+    public void setModelMapper(final ModelMapper modelMapper) {
+        this.modelMapper = modelMapper;
     }
 }
