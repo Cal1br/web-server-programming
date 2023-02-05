@@ -6,6 +6,7 @@ import me.cal1br.webserverprogramming.domain.user.model.UserEntity;
 import me.cal1br.webserverprogramming.domain.user.model.UserEntity_;
 import me.cal1br.webserverprogramming.specification.builder.SpecificationBuilder;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.util.CollectionUtils;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -22,7 +23,9 @@ public class UserSpecification extends BaseSpecification<UserEntity> implements 
 
     @Override
     public Predicate toPredicate(final Root<UserEntity> root, final CriteriaQuery<?> query, final CriteriaBuilder criteriaBuilder) {
-        query.orderBy(resolveOrder(filter.getColumnOrderList(), root, criteriaBuilder));
+        if (!CollectionUtils.isEmpty(filter.getColumnOrderList())) {
+            query.orderBy(resolveOrder(filter.getColumnOrderList(), root, criteriaBuilder));
+        }
         final SpecificationBuilder<UserEntity> specBuilder = SpecificationBuilder.init(root, query, criteriaBuilder)
                 .in(UserEntity_.id, this.filter.getIdList())
                 .startsWithIgnoreCase(UserEntity_.username, filter.getUserName())

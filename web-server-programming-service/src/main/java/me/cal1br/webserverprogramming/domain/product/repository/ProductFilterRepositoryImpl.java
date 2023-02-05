@@ -17,6 +17,7 @@ public class ProductFilterRepositoryImpl
 
     @Override
     protected Specification<ProductEntity> getSpecification(final ProductFilter filter) {
+        filter.setColumnOrderList(translateColumns(ProductEntity.class, filter.getColumnOrderList()));
         return new ProductSpecification(filter);
     }
 }

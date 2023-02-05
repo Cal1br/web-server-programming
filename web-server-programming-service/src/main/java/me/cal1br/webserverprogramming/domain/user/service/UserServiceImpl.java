@@ -59,7 +59,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserDTO,
 
     @Override
     public String register(final UserDTO dto) {
-        Optional<UserEntity> optionalUser = this.getRepository().findByUsername(dto.getUserName());
+        Optional<UserEntity> optionalUser = this.getRepository().findByUsername(dto.getUsername());
         if (optionalUser.isPresent()) {
             throw new UserAlreadyExists();
         }

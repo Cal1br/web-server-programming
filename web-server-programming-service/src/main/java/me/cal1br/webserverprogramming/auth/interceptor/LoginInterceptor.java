@@ -6,6 +6,7 @@ import me.cal1br.webserverprogramming.exception.AuthException;
 import me.cal1br.webserverprogramming.exception.UserNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -30,6 +31,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         try {
             handlerMethod = (HandlerMethod) handler;
         } catch (Exception ex) {
+            response.setStatus(HttpStatus.BAD_REQUEST.value());
             return false;
         }
         final LoginRequired loginRequired;

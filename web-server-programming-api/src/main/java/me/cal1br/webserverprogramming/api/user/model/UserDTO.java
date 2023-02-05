@@ -14,7 +14,7 @@ import javax.validation.constraints.Size;
 public class UserDTO extends BaseDTO {
     @NotEmpty
     @Size(min = 5, max = 15)
-    private String userName;
+    private String username;
     /**
      * Password must contain <b>at least one</b>
      * <br/>- one lower case latin letter

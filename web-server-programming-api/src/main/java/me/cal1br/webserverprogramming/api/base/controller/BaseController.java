@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface BaseController<DTO extends BaseDTO, FILTER extends BaseFilter> {
 
-    @GetMapping(path = "/filter")
+    @PostMapping(path = "/filter")
     List<DTO> findByFilter(FILTER filter);
 
     @PostMapping(path = "/save")

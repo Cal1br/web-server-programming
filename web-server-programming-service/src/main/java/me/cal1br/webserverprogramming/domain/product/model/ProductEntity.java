@@ -12,6 +12,7 @@ import javax.persistence.Entity;
 @Entity(name = "product")
 @EqualsAndHashCode(callSuper = true)
 public class ProductEntity extends BaseEntity {
+
     @Column(name = "product_name", nullable = false, length = 50)
     private String productName;
     @Column(name = "product_description", length = 2000)

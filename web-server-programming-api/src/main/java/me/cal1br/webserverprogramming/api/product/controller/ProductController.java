@@ -8,9 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 
 @RequestMapping(
-        path = "product",
-        produces = MediaType.APPLICATION_JSON_VALUE,
-        consumes = MediaType.APPLICATION_JSON_VALUE
+        path = "product"
 )
 public interface ProductController extends BaseController<ProductDTO, ProductFilter> {
 }

@@ -5,6 +5,7 @@ import me.cal1br.webserverprogramming.api.user.filter.UserFilter;
 import me.cal1br.webserverprogramming.api.user.model.UserDTO;
 import me.cal1br.webserverprogramming.base.controller.BaseControllerImpl;
 import me.cal1br.webserverprogramming.domain.user.service.UserService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -13,7 +14,7 @@ import java.util.List;
 @RestController
 public class UserControllerImpl extends BaseControllerImpl<UserDTO, UserFilter, UserService> implements UserController {
 
-    protected UserControllerImpl(final UserService service) {
+    public UserControllerImpl(final UserService service) {
         super(service);
     }
 
@@ -24,12 +25,12 @@ public class UserControllerImpl extends BaseControllerImpl<UserDTO, UserFilter, 
     }
 
     @Override
-    public String register(@Valid final UserDTO dto) {
-        return getService().register(dto);
+    public ResponseEntity<String> register(@Valid final UserDTO dto) {
+        return ResponseEntity.ok(getService().register(dto));
     }
 
     @Override
-    public String login(final String username, final String password) {
-        return getService().login(username, password);
+    public ResponseEntity<String> login(final String username, final String password) {
+        return ResponseEntity.ok(getService().login(username, password));
     }
 }

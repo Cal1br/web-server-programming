@@ -22,12 +22,6 @@ public class UserFilterRepositoryImpl extends BaseFilterRepositoryImpl<UserEntit
     @Override
     protected Specification<UserEntity> getSpecification(final UserFilter filter) {
         filter.setColumnOrderList(translateColumns(UserEntity.class, filter.getColumnOrderList()));
-
         return new UserSpecification(filter);
-    }
-
-    private List<ColumnOrder> translateColumns(Class<? extends BaseEntity> c, List<ColumnOrder> columnOrderList) {
-        //todo
-        return columnOrderList;
     }
 }

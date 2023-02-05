@@ -1,6 +1,7 @@
 package me.cal1br.webserverprogramming.base.repository;
 
 import me.cal1br.webserverprogramming.api.base.filter.BaseFilter;
+import me.cal1br.webserverprogramming.api.base.filter.ColumnOrder;
 import me.cal1br.webserverprogramming.base.model.BaseEntity;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -27,6 +28,11 @@ public abstract class BaseFilterRepositoryImpl<ENTITY extends BaseEntity, FILTER
     public List<ENTITY> countByFilter(final FILTER filter) {
         //todo
         return null;
+    }
+
+    protected List<ColumnOrder> translateColumns(Class<? extends BaseEntity> entityClass, List<ColumnOrder> columnOrderList) {
+        //todo
+        return columnOrderList;
     }
 
     protected abstract Specification<ENTITY> getSpecification(FILTER filter);
